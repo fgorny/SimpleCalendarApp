@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Ical.Net.CalendarComponents;
+using Ical.Net.DataTypes;
+using Ical.Net.Serialization;
+
 
 namespace WpfApp1
 {
@@ -20,10 +25,27 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
 
+            var now = DateTime.Now;
+            var later = now.AddHours(1);
+
+            var rrule = new RecurrencePattern(Ical.Net.FrequencyType.Daily, 1) { Count = 5 };
+            var e = new CalendarEvent
+            {
+                Start = new CalDateTime(now),
+                End = new CalDateTime(later),
+                RecurrenceRules = new List<RecurrencePattern> { rrule },
+            };
+
+
+
+            var calendar = new Ical.Net.Calendar();
+            calendar.Events.Add(e);
+           
 
         }
 
@@ -39,5 +61,7 @@ namespace WpfApp1
             cal.DisplayDateEnd = new DateTime(2030, 12, 31);
             cal.DisplayDate = new DateTime(2015, 01, 01);
         }
+
+        
     }
 }
